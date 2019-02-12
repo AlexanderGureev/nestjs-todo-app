@@ -104,8 +104,8 @@ __decorate([
     }),
     swagger_1.ApiResponse({ status: 403, description: "Authorization required." }),
     common_1.Get(),
-    common_1.UsePipes(new validation_pipe_1.ParseToIntPipe({ isOptional: true }), new common_1.ValidationPipe()),
-    __param(0, common_1.Res()), __param(1, common_1.Query()),
+    __param(0, common_1.Res()),
+    __param(1, common_1.Query(new validation_pipe_1.ParseToIntPipe({ isOptional: true }), new common_1.ValidationPipe())),
     __metadata("design:type", Function),
     __metadata("design:paramtypes", [Object, todo_dto_1.LimitDto]),
     __metadata("design:returntype", Promise)
@@ -177,6 +177,7 @@ __decorate([
     __metadata("design:returntype", Promise)
 ], TodoController.prototype, "deleteTodoById", null);
 TodoController = __decorate([
+    swagger_1.ApiUseTags("todos"),
     common_1.Controller("todos"),
     common_1.UseGuards(auth_guard_1.AuthGuard),
     __param(0, common_1.Inject(constans_1.TODO_SERVICE_PROVIDER)),
