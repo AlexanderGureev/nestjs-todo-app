@@ -1,9 +1,5 @@
-import * as mongoose from "mongoose";
-
-mongoose.set("useCreateIndex", true);
-mongoose.set("useFindAndModify", false);
-
-const TodoSchema = new mongoose.Schema(
+import { Schema } from "mongoose";
+const TodoSchema = new Schema(
   {
     text: {
       type: String,

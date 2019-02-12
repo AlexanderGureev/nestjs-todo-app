@@ -1,10 +1,7 @@
 import * as bcrypt from "bcrypt";
-import * as mongoose from "mongoose";
+import { Schema } from "mongoose";
 
-mongoose.set("useCreateIndex", true);
-mongoose.set("useFindAndModify", false);
-
-const UserSchema = new mongoose.Schema(
+const UserSchema = new Schema(
   {
     username: {
       type: String,
