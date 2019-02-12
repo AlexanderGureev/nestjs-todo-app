@@ -15,9 +15,12 @@ async function bootstrap() {
   app.setGlobalPrefix(configService.get("API_VERSION"));
   app.enableCors({
     credentials: true,
-    origin: true,
+    origin: [
+      "http://api-nestjs-todo.herokuapp.com",
+      "https://api-nestjs-todo.herokuapp.com",
+    ],
     methods: "GET,HEAD,PUT,PATCH,POST,DELETE",
-    allowedHeaders: ["Set-Cookie"],
+    allowedHeaders: ["Set-Cookie", "Origin", "Authorization"],
   });
 
   const options = new DocumentBuilder()
