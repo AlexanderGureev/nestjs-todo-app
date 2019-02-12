@@ -13,7 +13,7 @@ export class ConfigService implements IConfigService {
     HOST: process.env.HOST || "0.0.0.0",
     ENV: process.env.ENV || "development",
     SESSION_PREFIX: "session",
-    JWT_SECRET: "test",
+    COOKIE_SECRET: "test",
     API_VERSION: "v1",
     MONGO_URI: process.env.MONGO_URI || this.getMongoConnectionUri(),
     REDIS_URI: process.env.REDIS_URI || `redis://localhost:6379`,

@@ -25,7 +25,7 @@ export interface IConfig {
   SESSION_PREFIX?: string;
   API_VERSION?: string;
   ENV?: string;
-  JWT_SECRET?: string;
+  COOKIE_SECRET?: string;
 }
 export interface ITodo {
   text: string;

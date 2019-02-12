@@ -13,7 +13,7 @@ import {
   UseGuards,
 } from "@nestjs/common";
 import { IAuthService } from "../../interfaces";
-import { AUTH_SERVICE_PROVIDER, REDIS_CACHE_PROVIDER } from "../constans";
+import { AUTH_SERVICE_PROVIDER } from "../constans";
 import { RegisterUserDto, LoginUserDto } from "./auth.dto";
 import { ApiResponse } from "@nestjs/swagger";
 import { v4 } from "uuid";
@@ -24,7 +24,6 @@ export class AuthController {
   private readonly sessionOptions: {} = { httpOnly: true, signed: true };
   constructor(
     @Inject(AUTH_SERVICE_PROVIDER) private readonly authService: IAuthService,
-    @Inject(REDIS_CACHE_PROVIDER) private readonly redis,
   ) {}
 
   @ApiResponse({
@@ -37,9 +36,13 @@ export class AuthController {
   })
   @Post("/login")
   @UsePipes(ValidationPipe)
-  public async login(@Body() { email, password }: LoginUserDto, @Res() res) {
+  public async login(
+    @Body() { email, password }: LoginUserDto,
+    @Req() req,
+    @Res() res,
+  ) {
     const user = await this.authService.login(email, password);
-    const sessionId = await this.createSession(user);
+    const sessionId = await this.createSession(req, user);
     return res
       .cookie("sessionid", sessionId, this.sessionOptions)
       .status(HttpStatus.OK)
@@ -56,9 +59,9 @@ export class AuthController {
   })
   @Post("/register")
   @UsePipes(ValidationPipe)
-  public async register(@Body() user: RegisterUserDto, @Res() res) {
+  public async register(@Body() user: RegisterUserDto, @Req() req, @Res() res) {
     const userData = await this.authService.register(user);
-    const sessionId = await this.createSession(userData);
+    const sessionId = await this.createSession(req, userData);
     return res
       .cookie("sessionid", sessionId, this.sessionOptions)
       .status(HttpStatus.CREATED)
@@ -76,22 +79,22 @@ export class AuthController {
   @UseGuards(AuthGuard)
   @Get("/logout")
   public async logout(@Req() req, @Res() res) {
-    await this.deleteSession(req.signedCookies);
+    await this.deleteSession(req);
     return res
       .clearCookie("sessionid")
       .status(HttpStatus.NO_CONTENT)
       .send();
   }
-  private async createSession(user) {
+  private async createSession({ redis }, user) {
     const id = v4();
     const session = JSON.stringify({
       userId: user.id,
       id,
     });
-    await this.redis.setAsync(`session:${id}`, session);
+    await redis.setAsync(`session:${id}`, session);
     return id;
   }
-  private async deleteSession({ sessionid }) {
-    return await this.redis.delAsync(`session:${sessionid}`); // обработать случай когда удаление кук возвращает 0
+  private async deleteSession({ redis, signedCookies }) {
+    return await redis.delAsync(`session:${signedCookies.sessionid}`); // обработать случай когда удаление кук возвращает 0
   }
 }
