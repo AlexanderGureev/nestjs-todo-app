@@ -13,27 +13,21 @@ const app_module_1 = require("./modules/app.module");
 const constans_1 = require("./modules/constans");
 const swagger_1 = require("@nestjs/swagger");
 const express = require("express");
+const compression = require("compression");
 function bootstrap() {
     return __awaiter(this, void 0, void 0, function* () {
         const instanseExpress = express();
+        instanseExpress.use(compression());
         const app = yield core_1.NestFactory.create(app_module_1.AppModule, instanseExpress);
         const configService = app.get(constans_1.CONFIG_SEVICE_PROVIDER);
         app.setGlobalPrefix(configService.get("API_VERSION"));
-        app.enableCors({
-            credentials: true,
-            origin: [
-                "http://api-nestjs-todo.herokuapp.com",
-                "https://api-nestjs-todo.herokuapp.com",
-            ],
-            methods: "GET,HEAD,PUT,PATCH,POST,DELETE",
-            allowedHeaders: ["Set-Cookie", "Origin", "Authorization"],
-        });
         const options = new swagger_1.DocumentBuilder()
             .setTitle("Todos api example")
             .setDescription("The todos API description")
             .setVersion("1.0")
             .addTag("todos")
             .setBasePath("v1")
+            .setSchemes(configService.get("ENV") === "development" ? "http" : "https")
             .build();
         const document = swagger_1.SwaggerModule.createDocument(app, options);
         swagger_1.SwaggerModule.setup("v1/docs", app, document);

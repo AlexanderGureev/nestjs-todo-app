@@ -7,21 +7,12 @@ import * as compression from "compression";
 
 async function bootstrap() {
   const instanseExpress = express();
-  // instanseExpress.use(compression());
+  instanseExpress.use(compression());
 
   const app = await NestFactory.create(AppModule, instanseExpress);
 
   const configService = app.get(CONFIG_SEVICE_PROVIDER);
   app.setGlobalPrefix(configService.get("API_VERSION"));
-  app.enableCors({
-    credentials: true,
-    origin: [
-      "http://api-nestjs-todo.herokuapp.com",
-      "https://api-nestjs-todo.herokuapp.com",
-    ],
-    methods: "GET,HEAD,PUT,PATCH,POST,DELETE",
-    allowedHeaders: ["Set-Cookie", "Origin", "Authorization"],
-  });
 
   const options = new DocumentBuilder()
     .setTitle("Todos api example")
@@ -29,6 +20,7 @@ async function bootstrap() {
     .setVersion("1.0")
     .addTag("todos")
     .setBasePath("v1")
+    .setSchemes(configService.get("ENV") === "development" ? "http" : "https")
     .build();
   const document = SwaggerModule.createDocument(app, options);
   SwaggerModule.setup("v1/docs", app, document);

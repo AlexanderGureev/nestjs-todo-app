@@ -21,13 +21,14 @@ const auth_middleware_1 = require("../middleware/auth.middleware");
 const cookieParser = require("cookie-parser");
 const constans_1 = require("./constans");
 const morgan = require("morgan");
+const helmet = require("helmet");
 let AppModule = class AppModule {
     constructor(configService) {
         this.configService = configService;
     }
     configure(consumer) {
         consumer
-            .apply(morgan("tiny"), cookieParser(this.configService.get("COOKIE_SECRET")), redis_middleware_1.RedisMiddleware, auth_middleware_1.AuthMiddleware)
+            .apply(morgan("tiny"), helmet(), cookieParser(this.configService.get("COOKIE_SECRET")), redis_middleware_1.RedisMiddleware, auth_middleware_1.AuthMiddleware)
             .forRoutes("auth", "todos");
     }
 };
