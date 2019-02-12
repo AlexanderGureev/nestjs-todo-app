@@ -22,7 +22,7 @@ export class AppModule implements NestModule {
     consumer
       .apply(
         morgan("tiny"),
-        helmet(),
+        // helmet(),
         cookieParser(this.configService.get("COOKIE_SECRET")),
         RedisMiddleware,
         AuthMiddleware,

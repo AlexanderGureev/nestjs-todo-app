@@ -13,15 +13,14 @@ const app_module_1 = require("./modules/app.module");
 const constans_1 = require("./modules/constans");
 const swagger_1 = require("@nestjs/swagger");
 const express = require("express");
-const compression = require("compression");
 function bootstrap() {
     return __awaiter(this, void 0, void 0, function* () {
         const instanseExpress = express();
-        instanseExpress.use(compression());
         const app = yield core_1.NestFactory.create(app_module_1.AppModule, instanseExpress);
         const configService = app.get(constans_1.CONFIG_SEVICE_PROVIDER);
         app.setGlobalPrefix(configService.get("API_VERSION"));
         app.enableCors({
+            origin: true,
             credentials: true,
         });
         const options = new swagger_1.DocumentBuilder()

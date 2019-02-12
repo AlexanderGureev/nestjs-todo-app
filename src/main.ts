@@ -7,13 +7,14 @@ import * as compression from "compression";
 
 async function bootstrap() {
   const instanseExpress = express();
-  instanseExpress.use(compression());
+  // instanseExpress.use(compression());
 
   const app = await NestFactory.create(AppModule, instanseExpress);
 
   const configService = app.get(CONFIG_SEVICE_PROVIDER);
   app.setGlobalPrefix(configService.get("API_VERSION"));
   app.enableCors({
+    origin: true,
     credentials: true,
   });
 
