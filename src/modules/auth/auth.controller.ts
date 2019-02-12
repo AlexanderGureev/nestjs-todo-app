@@ -15,10 +15,11 @@ import {
 import { IAuthService } from "../../interfaces";
 import { AUTH_SERVICE_PROVIDER } from "../constans";
 import { RegisterUserDto, LoginUserDto } from "./auth.dto";
-import { ApiResponse } from "@nestjs/swagger";
+import { ApiResponse, ApiUseTags } from "@nestjs/swagger";
 import { v4 } from "uuid";
 import { AuthGuard } from "../../guards/auth.guard";
 
+@ApiUseTags("auth")
 @Controller("auth")
 export class AuthController {
   private readonly sessionOptions: {} = { httpOnly: true, signed: true };

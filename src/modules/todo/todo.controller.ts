@@ -19,9 +19,10 @@ import { ITodoService } from "../../interfaces";
 import { TODO_SERVICE_PROVIDER } from "../constans";
 import { TodoDto, IdDto, LimitDto } from "./todo.dto";
 import { ParseToIntPipe } from "../../pipes/validation.pipe";
-import { ApiResponse } from "@nestjs/swagger";
+import { ApiResponse, ApiUseTags } from "@nestjs/swagger";
 import { AuthGuard } from "../../guards/auth.guard";
 
+@ApiUseTags("todos")
 @Controller("todos")
 @UseGuards(AuthGuard)
 export class TodoController {
@@ -58,8 +59,11 @@ export class TodoController {
   })
   @ApiResponse({ status: 403, description: "Authorization required." })
   @Get()
-  @UsePipes(new ParseToIntPipe({ isOptional: true }), new ValidationPipe())
-  async getAllTodos(@Res() res, @Query() { limit }: LimitDto) {
+  async getAllTodos(
+    @Res() res,
+    @Query(new ParseToIntPipe({ isOptional: true }), new ValidationPipe())
+    { limit }: LimitDto,
+  ) {
     const todos = await this.appService.getAllTodos(limit);
     if (!todos.length) {
       return res.status(HttpStatus.NO_CONTENT).send();
