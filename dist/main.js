@@ -21,7 +21,9 @@ function bootstrap() {
         const app = yield core_1.NestFactory.create(app_module_1.AppModule, instanseExpress);
         const configService = app.get(constans_1.CONFIG_SEVICE_PROVIDER);
         app.setGlobalPrefix(configService.get("API_VERSION"));
-        app.enableCors();
+        app.enableCors({
+            credentials: true,
+        });
         const options = new swagger_1.DocumentBuilder()
             .setTitle("Todos api example")
             .setDescription("The todos API description")

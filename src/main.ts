@@ -13,7 +13,9 @@ async function bootstrap() {
 
   const configService = app.get(CONFIG_SEVICE_PROVIDER);
   app.setGlobalPrefix(configService.get("API_VERSION"));
-  app.enableCors();
+  app.enableCors({
+    credentials: true,
+  });
 
   const options = new DocumentBuilder()
     .setTitle("Todos api example")
