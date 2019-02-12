@@ -1,7 +1,7 @@
 import {
-  TODO_MODEL_PROVIDER,
   CONNECTION_PROVIDER,
   TODO_SERVICE_PROVIDER,
+  TODO_MODEL_PROVIDER,
 } from "../constans";
 import { IConnection } from "../../interfaces";
 import { TodoSchema } from "./todo.schema";
@@ -11,7 +11,7 @@ export const providers = [
   {
     provide: TODO_MODEL_PROVIDER,
     useFactory: (connection: IConnection) =>
-      connection.model("Todo", TodoSchema),
+      connection.model("todos", TodoSchema),
     inject: [CONNECTION_PROVIDER],
   },
   {

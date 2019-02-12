@@ -1,5 +1,7 @@
 import { Document, Connection, Model } from "mongoose";
 
+import { LimitDto, IdDto } from "src/modules/todo/todo.dto";
+
 export interface ITodoModel extends Document {
   _id: string;
   text: string;
@@ -17,7 +19,6 @@ export interface IConfig {
   JWT_SECRET?: string;
 }
 export interface ITodo {
-  _id: string;
   text: string;
   status: string;
   primary: boolean;
@@ -28,10 +29,14 @@ export interface IMongodbConfig {
   database: string;
 }
 export interface IConfigService {
-  getString(key: string): string;
+  get(key: string): string;
 }
 export interface ITodoService {
-  getAllTodos(): Promise<ITodo[]>;
+  getAllTodos(limit?: number): Promise<ITodo[]>;
+  getTodoById(id: string): Promise<ITodo>;
+  updateTodoById(id: string, todo: ITodo): Promise<ITodo>;
+  deleteTodoById(id: string): Promise<ITodo>;
+  createTodo(todo: ITodo): Promise<ITodo>;
 }
 export interface IConnection extends Connection {}
 export interface IModel<T> extends Model<any> {}

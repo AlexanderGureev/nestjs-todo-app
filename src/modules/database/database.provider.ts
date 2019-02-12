@@ -6,7 +6,7 @@ export const providers = [
   {
     provide: CONNECTION_PROVIDER,
     useFactory: async (configService: IConfigService) => {
-      const uri = configService.getString("MONGO_URI");
+      const uri = configService.get("MONGO_URI");
       return await mongoose.connect(uri, { useNewUrlParser: true });
     },
     inject: [CONFIG_SEVICE_PROVIDER],

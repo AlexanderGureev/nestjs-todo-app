@@ -14,14 +14,13 @@ export class ConfigService implements IConfigService {
     ENV: process.env.ENV || "development",
     SESSION_PREFIX: "session",
     JWT_SECRET: "test",
-    API_VERSION: "1.0.0",
-    MONGO_URI:
-      process.env.MONGO_URI ||
-      `mongodb://${this.mongodbConfig.username}:${
-        this.mongodbConfig.password
-      }@localhost:27017/${this.mongodbConfig.database}`,
+    API_VERSION: "v1",
+    MONGO_URI: process.env.MONGO_URI || this.getMongoConnectionUri(),
     REDIS_URI: process.env.REDIS_URI || `redis://localhost:6379`,
   };
-
-  public getString = key => this.config[key];
+  private getMongoConnectionUri() {
+    const { username, password, database } = this.mongodbConfig;
+    return `mongodb://${username}:${password}@localhost:27017/${database}`;
+  }
+  public get = key => this.config[key];
 }
