@@ -12,14 +12,17 @@ import {
   HttpStatus,
   ValidationPipe,
   UsePipes,
+  UseGuards,
 } from "@nestjs/common";
 import { ITodoService } from "../../interfaces";
 import { TODO_SERVICE_PROVIDER } from "../constans";
 import { TodoDto, IdDto, LimitDto } from "./todo.dto";
 import { ParseToIntPipe } from "../../pipes/validation.pipe";
 import { ApiResponse } from "@nestjs/swagger";
+import { AuthGuard } from "../../guards/auth.guard";
 
 @Controller("todos")
+@UseGuards(AuthGuard)
 export class TodoController {
   constructor(
     @Inject(TODO_SERVICE_PROVIDER) private readonly appService: ITodoService,

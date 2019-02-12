@@ -1,6 +1,6 @@
 import { Injectable, Inject, HttpException, HttpStatus } from "@nestjs/common";
 import { IUserModel, IAuthService, IUser, IModel } from "src/interfaces";
-import { USER_MODEL_PROVIDER } from "../constans";
+import { USER_MODEL_PROVIDER, REDIS_CACHE_PROVIDER } from "../constans";
 
 @Injectable()
 export class AuthService implements IAuthService {
