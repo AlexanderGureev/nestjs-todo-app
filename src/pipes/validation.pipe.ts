@@ -13,7 +13,6 @@ export class JoiValidationPipe implements PipeTransform {
 
   transform(value: any, metadata: ArgumentMetadata) {
     const res = Joi.validate(value, this.schema);
-    console.log(res.error);
     if (res.error) {
       throw new BadRequestException({
         status: HttpStatus.BAD_REQUEST,
@@ -21,5 +20,26 @@ export class JoiValidationPipe implements PipeTransform {
       });
     }
     return res.value;
+  }
+}
+@Injectable()
+export class ParseToIntPipe implements PipeTransform {
+  constructor(private readonly options) {}
+  transform(value: any, metadata: ArgumentMetadata) {
+    const keys = Object.keys(value);
+    if (!keys.length && this.options.isOptional) {
+      return value;
+    }
+    const val = keys.reduce(
+      (acc, key) => ({ [key]: parseInt(value[key], 10), ...acc }),
+      {},
+    );
+
+    const isValid = Object.values(val).filter(isNaN);
+    if (isValid.length) {
+      throw new BadRequestException("Validation failed");
+    }
+
+    return val;
   }
 }

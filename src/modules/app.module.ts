@@ -1,17 +1,9 @@
-import { Module, Inject } from "@nestjs/common";
+import { Module } from "@nestjs/common";
 import { TodoModule } from "./todo/todo.module";
-import { IConfigService } from "src/interfaces";
-import { CONFIG_SEVICE_PROVIDER } from "./constans";
+import { AuthModule } from "./auth/auth.module";
 import { ConfigModule } from "./config/config.module";
 
 @Module({
-  imports: [TodoModule, ConfigModule],
+  imports: [TodoModule, AuthModule, ConfigModule],
 })
-export class AppModule {
-  constructor(
-    @Inject(CONFIG_SEVICE_PROVIDER)
-    private readonly configService: IConfigService,
-  ) {}
-
-  public getPort = () => this.configService.get("PORT");
-}
+export class AppModule {}

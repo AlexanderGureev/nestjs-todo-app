@@ -1,12 +1,21 @@
 import { Document, Connection, Model } from "mongoose";
 
 import { LimitDto, IdDto } from "src/modules/todo/todo.dto";
+import { bool } from "joi";
 
 export interface ITodoModel extends Document {
   _id: string;
   text: string;
   status: string;
   primary: boolean;
+}
+export interface IUserModel extends Document {
+  _id: string;
+  username: string;
+  password: string;
+  database: string;
+  comparePassword: (hash: string, password: string) => boolean;
+  hashPassword: (password: string) => string;
 }
 export interface IConfig {
   PORT: string;
@@ -37,6 +46,15 @@ export interface ITodoService {
   updateTodoById(id: string, todo: ITodo): Promise<ITodo>;
   deleteTodoById(id: string): Promise<ITodo>;
   createTodo(todo: ITodo): Promise<ITodo>;
+}
+export interface IUser {
+  email: string;
+  username: string;
+  password: string;
+}
+export interface IAuthService {
+  login(email: string, password: string): Promise<IUser>;
+  register(user: IUser): Promise<IUser>;
 }
 export interface IConnection extends Connection {}
 export interface IModel<T> extends Model<any> {}

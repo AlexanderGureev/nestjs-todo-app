@@ -5,41 +5,50 @@ import {
   IsNotEmpty,
   IsBooleanString,
   IsIn,
-  IsNumberString,
-  MinLength,
-  MaxLength,
   Min,
   Max,
-  IsNumber,
   IsInt,
   IsPositive,
-  IsAlphanumeric,
-  IsAlpha,
 } from "class-validator";
 import { ITodo } from "../../interfaces";
+import { ApiModelProperty } from "@nestjs/swagger";
+
 export class LimitDto {
-  @IsNumberString()
-  @IsNotEmpty()
+  @ApiModelProperty({ required: false, description: "Number of tasks" })
+  @IsInt()
+  @IsPositive()
+  @Min(1)
+  @Max(100)
   @IsOptional()
-  @MinLength(1)
   readonly limit: number;
 }
 
 export class IdDto {
+  @ApiModelProperty({ description: "Task id" })
   @IsMongoId()
   readonly id: string;
 }
 
 export class TodoDto implements ITodo {
+  @ApiModelProperty({ example: "todo text", description: "Task decription" })
   @IsString()
   @IsNotEmpty()
-  @IsOptional()
   readonly text: string;
 
+  @ApiModelProperty({
+    required: false,
+    example: "true",
+    description: "Task status",
+  })
   @IsOptional()
   @IsBooleanString()
   readonly primary: boolean;
 
+  @ApiModelProperty({
+    required: false,
+    example: "active",
+    description: "Task priority",
+  })
   @IsOptional()
   @IsString()
   @IsIn(["active", "completed"])
