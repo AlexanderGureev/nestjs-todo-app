@@ -3,9 +3,12 @@ import { AppModule } from "./modules/app.module";
 import { CONFIG_SEVICE_PROVIDER } from "./modules/constans";
 import { SwaggerModule, DocumentBuilder } from "@nestjs/swagger";
 import * as express from "express";
+import * as compression from "compression";
 
 async function bootstrap() {
   const instanseExpress = express();
+  instanseExpress.use(compression());
+
   const app = await NestFactory.create(AppModule, instanseExpress);
 
   const configService = app.get(CONFIG_SEVICE_PROVIDER);

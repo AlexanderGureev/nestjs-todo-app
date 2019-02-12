@@ -3,6 +3,7 @@ import { TodoModule } from "./todo/todo.module";
 import { AuthModule } from "./auth/auth.module";
 import { ConfigModule } from "./config/config.module";
 import { RedisMiddleware } from "../middleware/redis.middleware";
+import { AuthMiddleware } from "../middleware/auth.middleware";
 import * as cookieParser from "cookie-parser";
 import { CONFIG_SEVICE_PROVIDER } from "./constans";
 import { IConfigService } from "src/interfaces";
@@ -24,6 +25,7 @@ export class AppModule implements NestModule {
         helmet(),
         cookieParser(this.configService.get("COOKIE_SECRET")),
         RedisMiddleware,
+        AuthMiddleware,
       )
       .forRoutes("auth", "todos");
   }

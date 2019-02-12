@@ -17,7 +17,7 @@ import { AUTH_SERVICE_PROVIDER } from "../constans";
 import { RegisterUserDto, LoginUserDto } from "./auth.dto";
 import { ApiResponse } from "@nestjs/swagger";
 import { v4 } from "uuid";
-import { AuthGuard } from "src/guards/auth.guard";
+import { AuthGuard } from "../../guards/auth.guard";
 
 @Controller("auth")
 export class AuthController {

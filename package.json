@@ -28,6 +28,7 @@
     "bluebird": "^3.5.3",
     "class-transformer": "^0.2.0",
     "class-validator": "^0.9.1",
+    "compression": "^1.7.3",
     "cookie-parser": "^1.4.3",
     "helmet": "^3.15.1",
     "joi": "^14.3.1",
