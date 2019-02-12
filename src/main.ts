@@ -14,8 +14,10 @@ async function bootstrap() {
   const configService = app.get(CONFIG_SEVICE_PROVIDER);
   app.setGlobalPrefix(configService.get("API_VERSION"));
   app.enableCors({
-    origin: true,
     credentials: true,
+    origin: true,
+    methods: "GET,HEAD,PUT,PATCH,POST,DELETE",
+    allowedHeaders: ["Set-Cookie"],
   });
 
   const options = new DocumentBuilder()
