@@ -9,6 +9,7 @@ import { CONFIG_SEVICE_PROVIDER } from "./constans";
 import { IConfigService } from "src/interfaces";
 import * as morgan from "morgan";
 import * as helmet from "helmet";
+import * as compression from "compression";
 
 @Module({
   imports: [TodoModule, AuthModule, ConfigModule],
@@ -23,6 +24,7 @@ export class AppModule implements NestModule {
       .apply(
         morgan("tiny"),
         helmet(),
+        compression(),
         cookieParser(this.configService.get("COOKIE_SECRET")),
         RedisMiddleware,
         AuthMiddleware,

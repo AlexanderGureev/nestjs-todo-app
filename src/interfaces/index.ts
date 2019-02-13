@@ -28,6 +28,7 @@ export interface IConfig {
   COOKIE_SECRET?: string;
 }
 export interface ITodo {
+  id: string;
   text: string;
   status: string;
   primary: boolean;

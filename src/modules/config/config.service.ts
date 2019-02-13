@@ -22,5 +22,5 @@ export class ConfigService implements IConfigService {
     const { username, password, database } = this.mongodbConfig;
     return `mongodb://${username}:${password}@localhost:27017/${database}`;
   }
-  public get = key => this.config[key];
+  public get = (key: string): string => this.config[key];
 }

@@ -26,7 +26,11 @@ export class AuthMiddleware implements NestMiddleware {
       const { _id, username, email } = await this.userModel
         .findById(userId)
         .exec();
-      req.user = { _id, username, email };
+
+      req.credentials = {
+        user: { _id, username, email },
+        isAuth: true,
+      };
       next();
     };
   }

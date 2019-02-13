@@ -21,14 +21,14 @@ export class TodoService implements ITodoService {
   }
   async updateTodoById(id: string, todo: ITodo): Promise<ITodo> {
     return await this.todoModel
-      .findByIdAndUpdate(id, { ...todo }, { new: true })
+      .findByIdAndUpdate(id, todo, { new: true })
       .exec();
   }
   async deleteTodoById(id: string): Promise<ITodo> {
     return await this.todoModel.findByIdAndDelete(id).exec();
   }
   async createTodo(todo: ITodo): Promise<ITodo> {
-    const newTodo = new this.todoModel({ ...todo });
+    const newTodo = new this.todoModel(todo);
     return await newTodo.save();
   }
 }

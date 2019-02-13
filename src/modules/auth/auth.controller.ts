@@ -1,6 +1,5 @@
 import {
   Inject,
-  Injectable,
   Controller,
   Post,
   Get,
@@ -43,11 +42,8 @@ export class AuthController {
     @Res() res,
   ) {
     const user = await this.authService.login(email, password);
-    const sessionId = await this.createSession(req, user);
-    return res
-      .cookie("sessionid", sessionId, this.sessionOptions)
-      .status(HttpStatus.OK)
-      .json(user);
+    await this.createSession(req, res, user);
+    return res.status(HttpStatus.OK).json(user);
   }
 
   @ApiResponse({
@@ -60,13 +56,10 @@ export class AuthController {
   })
   @Post("/register")
   @UsePipes(ValidationPipe)
-  public async register(@Body() user: RegisterUserDto, @Req() req, @Res() res) {
+  public async register(@Req() req, @Res() res, @Body() user: RegisterUserDto) {
     const userData = await this.authService.register(user);
-    const sessionId = await this.createSession(req, userData);
-    return res
-      .cookie("sessionid", sessionId, this.sessionOptions)
-      .status(HttpStatus.CREATED)
-      .json(userData);
+    await this.createSession(req, res, userData);
+    return res.status(HttpStatus.CREATED).json(userData);
   }
 
   @ApiResponse({
@@ -80,22 +73,20 @@ export class AuthController {
   @UseGuards(AuthGuard)
   @Get("/logout")
   public async logout(@Req() req, @Res() res) {
-    await this.deleteSession(req);
-    return res
-      .clearCookie("sessionid")
-      .status(HttpStatus.NO_CONTENT)
-      .send();
+    await this.deleteSession(req, res);
+    return res.status(HttpStatus.NO_CONTENT).send();
   }
-  private async createSession({ redis }, user) {
+  private async createSession({ redis }, res, user) {
     const id = v4();
     const session = JSON.stringify({
       userId: user.id,
       id,
     });
     await redis.setAsync(`session:${id}`, session);
-    return id;
+    res.cookie("sessionid", id, this.sessionOptions);
   }
-  private async deleteSession({ redis, signedCookies }) {
-    return await redis.delAsync(`session:${signedCookies.sessionid}`); // обработать случай когда удаление кук возвращает 0
+  private async deleteSession({ redis, signedCookies }, res) {
+    res.clearCookie("sessionid");
+    return await redis.delAsync(`session:${signedCookies.sessionid}`); // handle the case when removing cookies returns 0
   }
 }
